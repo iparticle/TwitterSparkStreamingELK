@@ -87,10 +87,10 @@ public class JavaTwitterHashTagJoinSentiments {
 		// stream
 		// can use them to generate OAuth credentials
 
-		System.setProperty("twitter4j.oauth.consumerKey", "W2TkIu3P4S3iXAoI8vOzgH88A");
-		System.setProperty("twitter4j.oauth.consumerSecret", "OBbxzWYV7IFk839y0fDsypKQNittzWxnFHAr5ALqimHsMVFls0");
-		System.setProperty("twitter4j.oauth.accessToken", "729580108877565952-VW0Y3IPTZ2FIjqccI8Av1uEgB4N3Adj");
-		System.setProperty("twitter4j.oauth.accessTokenSecret", "RN58yxgssyZ6oPclt8N7TvHC2vvQrNPEFEgZI5i4AAIWy");
+		System.setProperty("twitter4j.oauth.consumerKey", "XX");
+		System.setProperty("twitter4j.oauth.consumerSecret", "XX");
+		System.setProperty("twitter4j.oauth.accessToken", "XX");
+		System.setProperty("twitter4j.oauth.accessTokenSecret", "XX");
 
 		SparkConf sparkConf = new SparkConf().setMaster("local[2]").setAppName("JavaTwitterHashTagJoinSentiments");
 		JavaSparkContext jsc = new JavaSparkContext(sparkConf);
