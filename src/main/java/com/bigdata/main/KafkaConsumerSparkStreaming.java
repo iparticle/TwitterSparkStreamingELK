@@ -101,10 +101,7 @@ public class KafkaConsumerSparkStreaming {
 		// stream
 		// can use them to generate OAuth credentials
 
-		/*System.setProperty("twitter4j.oauth.consumerKey", "W2TkIu3P4S3iXAoI8vOzgH88A");
-		System.setProperty("twitter4j.oauth.consumerSecret", "OBbxzWYV7IFk839y0fDsypKQNittzWxnFHAr5ALqimHsMVFls0");
-		System.setProperty("twitter4j.oauth.accessToken", "729580108877565952-VW0Y3IPTZ2FIjqccI8Av1uEgB4N3Adj");
-		System.setProperty("twitter4j.oauth.accessTokenSecret", "RN58yxgssyZ6oPclt8N7TvHC2vvQrNPEFEgZI5i4AAIWy");*/
+		
 
 		SparkConf sparkConf = new SparkConf().setMaster("local[2]").setAppName("JavaTwitterHashTagJoinSentiments");
 		JavaSparkContext jsc = new JavaSparkContext(sparkConf);
@@ -146,34 +143,12 @@ public class KafkaConsumerSparkStreaming {
 			    }
 			);
 		
-		/*JavaDStream<String> words = stream.flatMap(new FlatMapFunction<Status, String>() {
-			public Iterator<String> call(Status s) {
-				return Arrays.asList(s.getText().split(" ")).iterator();
-			}
-		});*/
-
-//		JavaDStream<String> hashTags = words.filter(new Function<String, String>() {
-//			public String call(String word) throws JSONException, org.codehaus.jettison.json.JSONException {
-//				System.out.println("-----------------------WORDS-----------"+word);
-//				JSONObject completeTweetJson  = new JSONObject(word);
-////				org.codehaus.jettison.json.JSONObject  completeTweetJson = new org.codehaus.jettison.json.JSONObject(word);
-//				System.out.println("-----------Tweet-------------"+completeTweetJson.get("text"));
-////				word.startsWith("#")
-//				return completeTweetJson.get("text").toString();
-//			}
-//		});
-		
-		
 		
 		JavaDStream<String> hashTags = words.transform(new Function<JavaRDD<String>, JavaRDD<String>>() {
 			public JavaRDD<String> call(JavaRDD<String> rdd) throws Exception {
 				JavaRDD<String> jsonRDD = rdd.map(new Function<String, String>() {
 					public String call(String message) throws Exception {
 						JSONObject completeTweetJson = new JSONObject(message);
-//						System.out.println("---------------------------info-------------------------------" + message.toString());
-//						int sentiment = SNLPUtil.findSentiment(message.replace("#", ""));
-////					System.out.println(text+ ": sentiment : "+sentiment);
-						return completeTweetJson.getString("text");
 					}
 				});
 				return jsonRDD;
@@ -181,25 +156,6 @@ public class KafkaConsumerSparkStreaming {
 		});
 		
 		
-		
-
-		
-		/*hashTags.foreachRDD(new VoidFunction<JavaRDD<String>>() {
-			public void call(JavaRDD<String> rdd) throws Exception {
-				if (rdd.count() > 0) {
-					rdd.foreach(new VoidFunction<String>() {
-						public void call(String text) throws Exception {
-							System.out.println("---------------------------info-------------------------------" + text.toString());
-							
-							int sentiment = SNLPUtil.findSentiment(text.replace("#", ""));
-							System.out.println(text+ ": sentiment : "+sentiment);
-							
-						}
-					});
-					
-				}
-			}
-		});*/
 		
 		
 		hbaseContext.streamBulkPut(hashTags, TableName.valueOf("Tweets"), new PutFunction());
